@@ -1,0 +1,242 @@
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import 'package:easy_debounce/easy_debounce.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
+import 'min_max_step_model.dart';
+export 'min_max_step_model.dart';
+
+class MinMaxStepWidget extends StatefulWidget {
+  const MinMaxStepWidget({Key? key}) : super(key: key);
+
+  @override
+  _MinMaxStepWidgetState createState() => _MinMaxStepWidgetState();
+}
+
+class _MinMaxStepWidgetState extends State<MinMaxStepWidget> {
+  late MinMaxStepModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => MinMaxStepModel());
+
+    _model.textController1 ??= TextEditingController(text: '0');
+    _model.textFieldFocusNode1 ??= FocusNode();
+    _model.textController2 ??= TextEditingController(text: '100');
+    _model.textFieldFocusNode2 ??= FocusNode();
+    _model.textController3 ??= TextEditingController(text: '5');
+    _model.textFieldFocusNode3 ??= FocusNode();
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.maybeDispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
+    return Align(
+      alignment: AlignmentDirectional(0.00, -1.00),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+              child: TextFormField(
+                controller: _model.textController1,
+                focusNode: _model.textFieldFocusNode1,
+                autofocus: true,
+                obscureText: false,
+                decoration: InputDecoration(
+                  labelText: 'Min',
+                  labelStyle: FlutterFlowTheme.of(context).labelMedium,
+                  hintStyle: FlutterFlowTheme.of(context).labelMedium,
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).alternate,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).primary,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  errorBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).error,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  focusedErrorBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).error,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                style: FlutterFlowTheme.of(context).bodyMedium,
+                minLines: 1,
+                maxLength: 7,
+                maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                buildCounter: (context,
+                        {required currentLength,
+                        required isFocused,
+                        maxLength}) =>
+                    null,
+                keyboardType: const TextInputType.numberWithOptions(
+                    signed: true, decimal: true),
+                validator: _model.textController1Validator.asValidator(context),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(
+                      RegExp('^\\d+(\\.\\d{1,2})?\$'))
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+              child: TextFormField(
+                controller: _model.textController2,
+                focusNode: _model.textFieldFocusNode2,
+                autofocus: true,
+                obscureText: false,
+                decoration: InputDecoration(
+                  labelText: 'Max',
+                  labelStyle: FlutterFlowTheme.of(context).labelMedium,
+                  hintStyle: FlutterFlowTheme.of(context).labelMedium,
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).alternate,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).primary,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  errorBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).error,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  focusedErrorBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).error,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                style: FlutterFlowTheme.of(context).bodyMedium,
+                minLines: 1,
+                maxLength: 7,
+                maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                buildCounter: (context,
+                        {required currentLength,
+                        required isFocused,
+                        maxLength}) =>
+                    null,
+                keyboardType: TextInputType.number,
+                validator: _model.textController2Validator.asValidator(context),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(
+                      RegExp('^\\d+(\\.\\d{1,2})?\$'))
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+              child: TextFormField(
+                controller: _model.textController3,
+                focusNode: _model.textFieldFocusNode3,
+                autofocus: true,
+                textCapitalization: TextCapitalization.none,
+                obscureText: false,
+                decoration: InputDecoration(
+                  labelText: 'Step Size',
+                  labelStyle: FlutterFlowTheme.of(context).labelMedium,
+                  hintStyle: FlutterFlowTheme.of(context).labelMedium,
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).alternate,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).primary,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  errorBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).error,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  focusedErrorBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).error,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                style: FlutterFlowTheme.of(context).bodyMedium,
+                minLines: 1,
+                maxLength: 5,
+                maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                buildCounter: (context,
+                        {required currentLength,
+                        required isFocused,
+                        maxLength}) =>
+                    null,
+                keyboardType: TextInputType.number,
+                validator: _model.textController3Validator.asValidator(context),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(
+                      RegExp('^\\d+(\\.\\d{1,2})?\$'))
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
