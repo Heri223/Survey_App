@@ -1,0 +1,148 @@
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import 'package:easy_debounce/easy_debounce.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
+import 'new_option_model.dart';
+export 'new_option_model.dart';
+
+class NewOptionWidget extends StatefulWidget {
+  const NewOptionWidget({Key? key}) : super(key: key);
+
+  @override
+  _NewOptionWidgetState createState() => _NewOptionWidgetState();
+}
+
+class _NewOptionWidgetState extends State<NewOptionWidget> {
+  late NewOptionModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => NewOptionModel());
+
+    _model.textController ??= TextEditingController();
+    _model.textFieldFocusNode ??= FocusNode();
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.maybeDispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Align(
+          alignment: AlignmentDirectional(0.00, 0.00),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                  child: TextFormField(
+                    controller: _model.textController,
+                    focusNode: _model.textFieldFocusNode,
+                    autofocus: true,
+                    textCapitalization: TextCapitalization.sentences,
+                    obscureText: false,
+                    decoration: InputDecoration(
+                      labelText: 'Option',
+                      labelStyle: FlutterFlowTheme.of(context).labelMedium,
+                      hintStyle: FlutterFlowTheme.of(context).labelMedium,
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).alternate,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).primary,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      errorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).error,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      focusedErrorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).error,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    style: FlutterFlowTheme.of(context).bodyMedium,
+                    validator:
+                        _model.textControllerValidator.asValidator(context),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: AlignmentDirectional(0.00, 0.00),
+                child: FlutterFlowIconButton(
+                  borderColor: FlutterFlowTheme.of(context).info,
+                  borderRadius: 20,
+                  buttonSize: MediaQuery.sizeOf(context).width * 0.11,
+                  fillColor: FlutterFlowTheme.of(context).info,
+                  icon: Icon(
+                    Icons.add,
+                    color: FlutterFlowTheme.of(context).success,
+                    size: 20,
+                  ),
+                  onPressed: () async {
+                    _model.updatePage(() {
+                      FFAppState().addToOptionCount(1);
+                    });
+                  },
+                ),
+              ),
+              FlutterFlowIconButton(
+                borderColor: FlutterFlowTheme.of(context).info,
+                borderRadius: 20,
+                buttonSize: MediaQuery.sizeOf(context).width * 0.11,
+                fillColor: FlutterFlowTheme.of(context).info,
+                icon: FaIcon(
+                  FontAwesomeIcons.minus,
+                  color: FlutterFlowTheme.of(context).error,
+                  size: 20,
+                ),
+                onPressed: () {
+                  print('IconButton pressed ...');
+                },
+              ),
+            ].divide(SizedBox(width: 8)),
+          ),
+        ),
+      ],
+    );
+  }
+}
