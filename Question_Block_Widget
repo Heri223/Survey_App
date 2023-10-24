@@ -1,0 +1,528 @@
+import '/components/min_max_step_widget.dart';
+import '/components/new_option_widget.dart';
+import '/flutter_flow/flutter_flow_drop_down.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/form_field_controller.dart';
+import 'package:aligned_tooltip/aligned_tooltip.dart';
+import 'package:easy_debounce/easy_debounce.dart';
+import 'package:expandable/expandable.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
+import 'question_block_model.dart';
+export 'question_block_model.dart';
+
+class QuestionBlockWidget extends StatefulWidget {
+  const QuestionBlockWidget({
+    Key? key,
+    String? questionCount,
+  })  : this.questionCount = questionCount ?? '1',
+        super(key: key);
+
+  final String questionCount;
+
+  @override
+  _QuestionBlockWidgetState createState() => _QuestionBlockWidgetState();
+}
+
+class _QuestionBlockWidgetState extends State<QuestionBlockWidget> {
+  late QuestionBlockModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => QuestionBlockModel());
+
+    _model.expandableController = ExpandableController(initialExpanded: true);
+    _model.questionTextController ??= TextEditingController();
+    _model.questionTextFocusNode ??= FocusNode();
+    _model.textController2 ??= TextEditingController();
+    _model.textFieldFocusNode ??= FocusNode();
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.maybeDispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Align(
+          alignment: AlignmentDirectional(0.00, -1.00),
+          child: Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Flexible(
+                      child: Container(
+                        width: double.infinity,
+                        color: Colors.white,
+                        child: ExpandableNotifier(
+                          controller: _model.expandableController,
+                          child: ExpandablePanel(
+                            header: Text(
+                              'Question #',
+                              style: FlutterFlowTheme.of(context)
+                                  .displaySmall
+                                  .override(
+                                    fontFamily: 'Outfit',
+                                    color: Colors.black,
+                                  ),
+                            ),
+                            collapsed: Text(
+                              _model.questionTextController.text,
+                              style: FlutterFlowTheme.of(context).bodyMedium,
+                            ),
+                            expanded: Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(5, 10, 5, 10),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        8, 0, 8, 0),
+                                    child: TextFormField(
+                                      controller: _model.questionTextController,
+                                      focusNode: _model.questionTextFocusNode,
+                                      autofocus: true,
+                                      textCapitalization:
+                                          TextCapitalization.sentences,
+                                      textInputAction: TextInputAction.done,
+                                      obscureText: false,
+                                      decoration: InputDecoration(
+                                        labelText: 'Question Text',
+                                        labelStyle: FlutterFlowTheme.of(context)
+                                            .labelMedium,
+                                        hintStyle: FlutterFlowTheme.of(context)
+                                            .labelMedium,
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .alternate,
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .primary,
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        errorBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .error,
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        focusedErrorBorder:
+                                            UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .error,
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                      keyboardType: TextInputType.multiline,
+                                      validator: _model
+                                          .questionTextControllerValidator
+                                          .asValidator(context),
+                                    ),
+                                  ),
+                                  if (_model.fieldTypeValue != null &&
+                                      _model.fieldTypeValue != '')
+                                    FlutterFlowDropDown<String>(
+                                      controller:
+                                          _model.fieldTypeValueController ??=
+                                              FormFieldController<String>(null),
+                                      options: [
+                                        'Single Choice',
+                                        'Multiple Choice',
+                                        'Dropdown',
+                                        'Short Answer',
+                                        'Long Answer',
+                                        'Slider',
+                                        'Counter'
+                                      ],
+                                      onChanged: (val) => setState(
+                                          () => _model.fieldTypeValue = val),
+                                      width: 300,
+                                      height: 50,
+                                      textStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                      hintText: 'Please select...',
+                                      icon: Icon(
+                                        Icons.keyboard_arrow_down_rounded,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryText,
+                                        size: 24,
+                                      ),
+                                      fillColor: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
+                                      elevation: 2,
+                                      borderColor: FlutterFlowTheme.of(context)
+                                          .alternate,
+                                      borderWidth: 2,
+                                      borderRadius: 8,
+                                      margin: EdgeInsetsDirectional.fromSTEB(
+                                          16, 4, 16, 4),
+                                      hidesUnderline: true,
+                                      isSearchable: false,
+                                      isMultiSelect: false,
+                                    ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        8, 0, 8, 0),
+                                    child: TextFormField(
+                                      controller: _model.textController2,
+                                      focusNode: _model.textFieldFocusNode,
+                                      autofocus: true,
+                                      textCapitalization:
+                                          TextCapitalization.sentences,
+                                      obscureText: false,
+                                      decoration: InputDecoration(
+                                        labelText: 'Description',
+                                        labelStyle: FlutterFlowTheme.of(context)
+                                            .labelMedium,
+                                        hintStyle: FlutterFlowTheme.of(context)
+                                            .labelMedium,
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .alternate,
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .primary,
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        errorBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .error,
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        focusedErrorBorder:
+                                            UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .error,
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                      maxLines: 10,
+                                      minLines: 0,
+                                      maxLength: 500,
+                                      maxLengthEnforcement:
+                                          MaxLengthEnforcement.enforced,
+                                      validator: _model.textController2Validator
+                                          .asValidator(context),
+                                    ),
+                                  ),
+                                  Builder(
+                                    builder: (context) {
+                                      if ((_model.fieldTypeValue ==
+                                              'Single Choice') ||
+                                          (_model.fieldTypeValue ==
+                                              'Multiple  Choice') ||
+                                          (_model.fieldTypeValue ==
+                                              'Dropdown ')) {
+                                        return Builder(
+                                          builder: (context) {
+                                            final optionCount = FFAppState()
+                                                .OptionCount
+                                                .toList()
+                                                .take(10)
+                                                .toList();
+                                            return ListView.builder(
+                                              padding: EdgeInsets.zero,
+                                              shrinkWrap: true,
+                                              scrollDirection: Axis.vertical,
+                                              itemCount: optionCount.length,
+                                              itemBuilder:
+                                                  (context, optionCountIndex) {
+                                                final optionCountItem =
+                                                    optionCount[
+                                                        optionCountIndex];
+                                                return Container(
+                                                  decoration: BoxDecoration(),
+                                                  child: wrapWithModel(
+                                                    model: _model
+                                                        .newOptionModels
+                                                        .getModel(
+                                                      optionCountItem
+                                                          .toString(),
+                                                      optionCountIndex,
+                                                    ),
+                                                    updateCallback: () =>
+                                                        setState(() {}),
+                                                    updateOnChange: true,
+                                                    child: NewOptionWidget(
+                                                      key: Key(
+                                                        'Keyjbu_${optionCountItem.toString()}',
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                        );
+                                      } else if ((_model.fieldTypeValue ==
+                                              'Counter') ||
+                                          (_model.fieldTypeValue == 'Slider')) {
+                                        return Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            AlignedTooltip(
+                                              content: Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(4, 4, 4, 4),
+                                                  child: Text(
+                                                    'Message...',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyLarge,
+                                                  )),
+                                              offset: 4,
+                                              preferredDirection:
+                                                  AxisDirection.down,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              backgroundColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryBackground,
+                                              elevation: 4,
+                                              tailBaseWidth: 24,
+                                              tailLength: 12,
+                                              waitDuration:
+                                                  Duration(milliseconds: 100),
+                                              showDuration:
+                                                  Duration(milliseconds: 1500),
+                                              triggerMode:
+                                                  TooltipTriggerMode.tap,
+                                              child: Align(
+                                                alignment: AlignmentDirectional(
+                                                    -1.00, -1.00),
+                                                child: Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(5, 0, 10, 0),
+                                                  child: FaIcon(
+                                                    FontAwesomeIcons.infoCircle,
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .secondaryText,
+                                                    size: 18,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: wrapWithModel(
+                                                model: _model.minMaxStepModel,
+                                                updateCallback: () =>
+                                                    setState(() {}),
+                                                child: MinMaxStepWidget(),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      } else {
+                                        return Visibility(
+                                          visible: _model.expandableController
+                                                  .expanded ??
+                                              true,
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [],
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                  Align(
+                                    alignment: AlignmentDirectional(0.00, 0.00),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Align(
+                                          alignment:
+                                              AlignmentDirectional(-1.00, 0.00),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    10, 0, 0, 0),
+                                            child: FlutterFlowIconButton(
+                                              borderColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .info,
+                                              borderRadius: 20,
+                                              borderWidth: 3,
+                                              buttonSize: 40,
+                                              fillColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .info,
+                                              icon: FaIcon(
+                                                FontAwesomeIcons.trashAlt,
+                                                color: Color(0xFF75070D),
+                                                size: 24,
+                                              ),
+                                              onPressed: () {
+                                                print('IconButton pressed ...');
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                        if ((_model.fieldTypeValue ==
+                                                'Single Choice') ||
+                                            (_model.fieldTypeValue ==
+                                                'Multiple  Choice') ||
+                                            (_model.fieldTypeValue ==
+                                                'Dropdown'))
+                                          Expanded(
+                                            child: SwitchListTile.adaptive(
+                                              value:
+                                                  _model.switchListTileValue ??=
+                                                      false,
+                                              onChanged: (newValue) async {
+                                                setState(() =>
+                                                    _model.switchListTileValue =
+                                                        newValue!);
+                                              },
+                                              title: Text(
+                                                'Branching',
+                                                textAlign: TextAlign.end,
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelMedium,
+                                              ),
+                                              tileColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryBackground,
+                                              activeColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primary,
+                                              activeTrackColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .accent1,
+                                              dense: false,
+                                              controlAffinity:
+                                                  ListTileControlAffinity
+                                                      .trailing,
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ].divide(SizedBox(height: 15)),
+                              ),
+                            ),
+                            theme: ExpandableThemeData(
+                              tapHeaderToExpand: true,
+                              tapBodyToExpand: true,
+                              tapBodyToCollapse: false,
+                              headerAlignment:
+                                  ExpandablePanelHeaderAlignment.center,
+                              hasIcon: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
+              child: FlutterFlowIconButton(
+                borderColor: FlutterFlowTheme.of(context).primary,
+                borderRadius: 20,
+                borderWidth: 1,
+                buttonSize: 40,
+                fillColor: FlutterFlowTheme.of(context).accent1,
+                icon: Icon(
+                  Icons.add,
+                  color: FlutterFlowTheme.of(context).primaryText,
+                  size: 24,
+                ),
+                onPressed: () {
+                  print('IconButton pressed ...');
+                },
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
